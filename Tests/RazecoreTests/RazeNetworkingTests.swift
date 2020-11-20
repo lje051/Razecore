@@ -6,17 +6,32 @@
 //
 
 import XCTest
+@testable import Razecore
 
 final class RazeNetworkingTests: XCTestCase {
 
- 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testLoadDataCell(){
+        let manager = Razecore.Networking.Manager()
+        let expectation = XCTestExpectation(description: "called for data")
+        guard let url = URL(string: "https://raywenderlich.com") else {
+            return XCTFail("could not create url properly")
+        }
+        
+        manager.loadData(from:url) {
+            result in
+            switch result {
+            case .success(let returnedData):
+                XCTAssertNotNil(returnedData, "response data is nil")
+            case .failure(let error) :
+                XCTFail(error?.localizedDescription ?? "error forming error result")
+            }
+        }
     }
+ 
+  
 
    static var allTests = [
-   ("testExample", testExample)
+   ("testLoadDataCell", testLoadDataCell)
    ]
 
 }
